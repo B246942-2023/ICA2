@@ -86,4 +86,62 @@ for filename in os.listdir(input_folder_path):
         if motif_exist_flag == False:
             no_motifs_id.append(id)
 
+#5 Save and Show results
+#write the result into a file
+filepath_out = f'{outfolder}/{filename_base}_motif_report.txt'
+#sort the dict:motifs_counts , to show the more frequent ones first
+sorted_motifs_counts = sorted(motifs_counts.items(), key=lambda x: x[1], reverse=True) #sorted_motifs_counts = [(k,v),(k,v)(k,v)...]
+#sort the dict:motifs_counts , from high hitcount to low one
+sorted_id_Hitcount = sorted(id_Hitcount.items(), key=lambda x: x[1], reverse=True) #[(sq1,hits1),(sq2,hits2),(sq3,hits3)....]
+#save the 10 highest counts data into blast queneline
+filename="autoscreen.txt"
+auto_out=f'{outfolder}/{filename}'
+with open(auto_out, 'w') as auto:
+    for id,counts in sorted_id_Hitcount[:10]:
+        auto.write(f"{id}\n")
 
+
+with open(filepath_out, 'w') as f:
+    #write the title
+    f.write("Motifs Scan".center(100,'=') + "\n")
+    f.write("RESULTS".center(100) + "\n\n")
+    #write the basic counts data
+    f.write("Overall".center(100) + "\n\n")
+    for key,value in sorted_motifs_counts:
+        f.write(f"\tmotif:{key}".ljust(40))
+        f.write(f"{value}/{file_total} counts/total_sequences".rjust(46) + "\n")
+    f.write("\n")
+
+    #write the ID Detail 
+    f.write("-".center(100,'-') + "\n\n")
+    f.write("ID Detail".center(100) + "\n\n")
+    for key in motifs_id:
+        f.write(f"motif:{key}".center(100) + "\n")
+        for id in range(0,len(motifs_id[key]),5):
+            f.write('\t'+'\t'.join(motifs_id[key][id:id+5]) + "\n")
+        f.write("\n")           
+    f.write("\n")
+
+    # write the No Motif ID
+    f.write("-".center(100,'-') + "\n\n")
+    f.write("No Motif ID".center(100) + "\n\n")
+    for id in range(0,len(no_motifs_id),5):
+        f.write('\t'+'\t'.join(no_motifs_id[id:id+5]) + "\n")
+    f.write("\n")
+
+    # Print the 10 sequences_id of highest counts of motifs
+    f.write("-".center(100,'-') + "\n\n")
+    f.write("Auto Screen".center(100) + "\n\n")
+    f.write(f"\tID".ljust(40))
+    f.write(f"Motifs Counts".rjust(40) + "\n")
+    f.write("\n")
+    for id,counts in sorted_id_Hitcount[:10]:
+        f.write(f"\t{id}".ljust(40))
+        f.write(f"{counts}".rjust(40) + "\n")
+    f.write("\n")
+
+    f.write("=".center(100,"=") + "\n")
+
+#6 print the file into the screen
+with open(filepath_out, 'r') as f:
+    print(f.read())
