@@ -20,9 +20,9 @@ def check_output_directory( outfolder ):
 #=====================================================main body==================================================  
 print("START STEP2".center(100, '-'))
 print(f'''STEP2:Caculate the conservation level''')
-
-print("Aligning...".center(100, '-'))
-
+input("Press Enter to Align".center(100,"-"))
+print("Aligning".center(100, '-'))
+print("Please Wait".center(100))
 
 #1 check and make directory
 outfolder = "s2_out"
@@ -52,3 +52,6 @@ thread.join()
 plotcon_outputpath = f"s2_out"
 command_plotcon_png = f"plotcon -sequence {clustalo_outputpath} -gdirectory {plotcon_outputpath} -winsize 10 -graph png -goutfile {filename_base} -scorefile EBLOSUM62 "
 plotcon_out,plotcon_error = linux_commands(command_plotcon_png)
+
+print("The conservation graph are saved in the form of PNG")
+print("End the STEP2 ".center(100,"-"))
