@@ -19,6 +19,7 @@ def check_output_directory( outfolder ):
 #=====================================================main body==================================================
 print("START STEP3".center(100, '-'))
 print(f'''STEP3:Scan the motifs''')
+input("Press Enter to Scan".center(100,"-"))
 print("Scaning".center(100))
 print()
 
@@ -145,3 +146,6 @@ with open(filepath_out, 'w') as f:
 #6 print the file into the screen
 with open(filepath_out, 'r') as f:
     print(f.read())
+
+print()
+print("End the STEP3 ".center(100,"-"))
