@@ -103,8 +103,21 @@ def analysis_fasta(fasta):
     #print(seq_info_dict)
     return len(seq_info_dict)
 
-
+#Help manual when no search results
+def help_manual():
+    print("IMPORTANT".center(100,"-"))
+    print("Found 0 results in your search!")
+    print()
+    print(f'''Suggestions: 
+                1 : Please do not enter plural nouns for proteins eg: kinases x     kinase √
+                2 : Check your final query below to find if there is any spell faults
+                3 : Paste the query to the ncbi website to see if there is any difference (That means net error) 
+''')
+    
 #=====================================================main body==================================================
+print("START STEP1".center(100, '-'))
+print(f'''STEP1:Input your protein of interest and do a search
+  ''')
 
 # main loop : keeping loop when the usr don't want to save data
 while True:
@@ -138,6 +151,7 @@ while True:
 
     #4.5 help the usr imporve the input when no results
     if (num_data_all == 0 or num_data_not_partial == 0) :
+        help_manual()
         print(f'''Your NCBI query:
                 {query_all}
                 {query_not_partial}
@@ -185,7 +199,5 @@ while True:
 
     #6 Decide Quit
     if loop_flag == False:
-        
+        print("End the STEP1 ".center(100,"-"))
         break 
-
-
