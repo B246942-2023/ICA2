@@ -93,7 +93,7 @@ if new_sequences_to_blast:
         wirte_status(id,"Completed")
     except Exception as e:
         wirte_status(id,"Error")
-    subprocess.run(["python3", "s4.1_runblast.py"])#DEVNULL means can be run in background
+    subprocess.Popen(["python3", "s4.1_runblast.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)#DEVNULL means can be run in background
 
 else :
     with open('s4_out/seqBLAST_pre.txt',"r") as file:
