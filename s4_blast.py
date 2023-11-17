@@ -188,7 +188,7 @@ while True:
                     shutil.copy(f"s3_out/{file}",f"s4_out/blast_copy/{file}")
             count = 0
             while count <5: #run 5 blast at a same time
-                #need a function
+                subprocess.Popen(["python3", "s4.1_runblast.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
                 time.sleep(0.3)
                 count+=1
             print()
