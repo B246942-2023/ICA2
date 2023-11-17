@@ -2,10 +2,7 @@
 #=================================================  module import==================================================
 import os
 import subprocess
-import shutil
-import sys
 import time
-import threading
 #=================================================function define==================================================
 # write data to file
 def writefile(data, filename):
@@ -87,7 +84,7 @@ if new_sequences_to_blast:
     output_file = f's4_out/{id}_blast.txt'
     cmd = f'blastp -db nr -query {fasta_file} -out {output_file} -outfmt 7 -remote'
     try: 
-        #subprocess.run(cmd, shell=True, check=True)
+        subprocess.run(cmd, shell=True, check=True)
         print(f"running blasting{fasta_file}")
         #time.sleep(10)
         wirte_status(id,"Completed")
