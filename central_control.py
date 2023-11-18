@@ -16,7 +16,65 @@ def check_output_directory( outfolder ):
 def make_dir(outfolder):
     if not os.path.exists(outfolder):
         os.makedirs(outfolder)
-
+#collate_data into a fold 
+def collate_data(filepath):
+    #make a dirctory to save data
+    check_output_directory( f"{filepath}" )
+    check_output_directory( f"{filepath}/fetched_sequences" )
+    check_output_directory( f"{filepath}/conservation_analysis_results" )
+    check_output_directory( f"{filepath}/motif_scan_results" )
+    check_output_directory( f"{filepath}/motif_scan_results/Every_id" )
+    check_output_directory( f"{filepath}/blast_results" )
+    #handle s1_out
+    for filename in os.listdir("s1_out"):
+        source_path = os.path.join("s1_out", filename)
+        destination_path = os.path.join(f"{filepath}/fetched_sequences", filename)
+        shutil.copy(source_path, destination_path)
+    #handle s2_out
+    for filename in os.listdir("s2_out"):
+        if filename.endswith('.png'):
+            source_path = os.path.join("s2_out", filename)
+            destination_path = os.path.join(f"{filepath}/conservation_analysis_results", filename)
+            shutil.copy(source_path, destination_path)
+    #handle s3_out
+    for filename in os.listdir("s3_out"):
+        if filename.endswith('report.txt'):#the report
+            source_path = os.path.join("s3_out", filename)
+            destination_path = os.path.join(f"{filepath}/motif_scan_results", filename)
+            shutil.copy(source_path, destination_path)
+        if filename.endswith('motifs.txt'):#the every_ids
+            source_path = os.path.join("s3_out", filename)
+            destination_path = os.path.join(f"{filepath}/motif_scan_results/Every_id", filename)
+            shutil.copy(source_path, destination_path)
+    #handle s4_out
+    for filename in os.listdir("s4_out"):
+        if filename.endswith('.txt'):
+            source_path = os.path.join("s4_out", filename)
+            destination_path = os.path.join(f"{filepath}/blast_results", filename)
+            shutil.copy(source_path, destination_path)
+#export the data
+def export_data():
+    while True:
+        print("-".center(100,"-"))
+        print()
+        print("Input your export path".center(100))
+        print()
+        print("Example:".center(100))
+        print("Results/glucose-6-phosphatase_Aves".center(100))
+        print()
+        path=input("Your Path: ")
+        path = path.strip()
+        if os.path.exists(path):
+            print("IMPORTANT:Path already exsit, input again".center(100))
+            print()
+            input("Press Enter to continue".center(100,"-"))
+        else:
+            print("Make a double check:".center(100))
+            print(path.center(100))
+            print()
+            if input("Confirm(y/n) : ") == "y" :
+                collate_data(path)
+                break
 
 
 #=====================================================main body==================================================
@@ -77,13 +135,15 @@ while True:
             print("IMPORTANT:No data, Do '1.Search and Fetch' ".center(100))
     if central_choices == "5":#collate_data
         if flag_search_fecth_done:
-            print("collate_data()")
-
+            collate_data("collate_data")
+            print()
+            print("Data are collected in folder : collected_data ".center(100))
+            print()
         else :
             print("IMPORTANT:No data, Do '1.Search and Fetch' ".center(100))
     if central_choices == "6":#export_data
         if flag_search_fecth_done:
-            print("export_data()")
+            export_data()
         else :
             print("IMPORTANT:No data, Do '1.Search and Fetch' ".center(100))
     if central_choices == "7":#reset
