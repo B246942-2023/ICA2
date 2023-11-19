@@ -16,6 +16,7 @@ def check_output_directory( outfolder ):
 def make_dir(outfolder):
     if not os.path.exists(outfolder):
         os.makedirs(outfolder)
+
 #collate_data into a fold 
 def collate_data(filepath):
     #make a dirctory to save data
@@ -86,27 +87,67 @@ def reset(directory):
         elif not item.endswith('.py'):
             os.remove(item_path)
 
+def track_status():
+    flag_search_fecth_done = False
+    flag_conservation_analysis = False
+    flag_motif_scan = False
+    flag_BLAST =False    
+    flag_BLAST_finished = False
+    search_name = "noname"
+    
+    #track the search and fetch
+    if os.path.exists("s1_out"):
+        for file in os.listdir("s1_out"):
+            if file.endswith('.fasta'):
+                flag_search_fecth_done = True
+                search_name = file.replace('.fasta',"")
+    #track the conservation
+    if os.path.exists("s2_out"):
+        for file in os.listdir("s2_out"):
+            if file.endswith('.1.png'):
+                file=file.replace('.1.png',"")
+                if file == search_name :
+                    flag_conservation_analysis = True
+
+    #track the motif scan
+    if os.path.exists("s3_out"):
+        for file in os.listdir("s3_out"):
+            if file.endswith('_motif_report.txt'):
+                file=file.replace('_motif_report.txt',"")
+                if file == search_name :
+                    flag_motif_scan = True
+
+    #track the blast running and finish
+    if os.path.exists("s4_out/seqBLAST_pre.txt"):
+        #check if there is a BLAST is running
+        with open("s4_out/seqBLAST_pre.txt","r") as file:
+            content = file.read()
+            if "Running" in content:
+                flag_BLAST = True
+            if ("FINISH" in content) and (not flag_BLAST)  :
+                flag_BLAST_finished = True
+    
+    return flag_search_fecth_done,flag_conservation_analysis,flag_motif_scan,flag_BLAST,flag_BLAST_finished,search_name
+
 #=====================================================main body==================================================
 #1 make all the dir
 make_dir("s1_out")
 make_dir("s2_out")
 make_dir("s3_out")
 make_dir("s4_out")
-    #track the search and fetch
-if os.path.exists("s1_out"):
-    for file in os.listdir("s1_out"):
-        if file.endswith('.fasta'):
-            flag_search_fecth_done = True
-           
+
 while True:
     #status check : many steps can only work when the search and fecth fasta have done
-    print("track")
+    flag_search_fecth_done,flag_conservation_analysis,flag_motif_scan,flag_BLAST,flag_BLAST_finished,search_name = track_status()
 
     # menu content
     print("MENU".center(100,"="))
     print("Central Control".center(100))
     print()
+    print(f"Data Fetched  : {flag_search_fecth_done}" .center(100))
+    print(f"BLAST Running : {flag_BLAST}" .center(100))
     print()
+    print(f"    Current Sequences Set : {search_name}")
     print()
     print(f'''    1.Search and Fetch 
     2.Analysis the Conservation
@@ -119,6 +160,7 @@ while True:
     9.Quit''')
     print()
     print()
+    print(f"\tConservation Data : {flag_conservation_analysis}\t Motif Scan Data : {flag_motif_scan}\t\t BLAST Data : {flag_BLAST_finished}")
     print()
     print()
     print("=".center(100,"="))
@@ -156,15 +198,20 @@ while True:
         else :
             print("IMPORTANT:No data, Do '1.Search and Fetch' ".center(100))
     if central_choices == "7":#reset
-        reset()
-
+        if not flag_BLAST :
+            if input("Confirm your reset:(y/n)") == "y":
+                reset(".")
+                print()
+                print("Reset finished".center(100))
+                print()
+        else :
+            print("IMPORTANT:BlAST is running,can't reset ".center(100))
     if central_choices == "8":
-        print("auto")
-
+        print()
+        print("I haven't finished this yet >-< ,sorry!".center(100))
+        print()
     if central_choices == "9":
         break
     if central_choices not in "1%2^3(4!5@6+7#8*9":# if just 123456789 when input 12, it will not be handled
         print("Wrong Input")
     input("Press Enter to back the MENU".center(100,"-"))
-
-
