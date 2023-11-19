@@ -75,7 +75,16 @@ def export_data():
             if input("Confirm(y/n) : ") == "y" :
                 collate_data(path)
                 break
-
+#reset the folder(delete all the un".py" end files and folders)
+def reset(directory):
+    for item in os.listdir(directory):
+        if item.startswith('.'):#I lost all my git log before adding this.FUCK
+            continue
+        item_path = os.path.join(directory, item)
+        if os.path.isdir(item_path):
+            shutil.rmtree(item_path)
+        elif not item.endswith('.py'):
+            os.remove(item_path)
 
 #=====================================================main body==================================================
 #1 make all the dir
@@ -147,7 +156,7 @@ while True:
         else :
             print("IMPORTANT:No data, Do '1.Search and Fetch' ".center(100))
     if central_choices == "7":#reset
-        print("reset()")
+        reset()
 
     if central_choices == "8":
         print("auto")
