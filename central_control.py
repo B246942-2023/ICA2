@@ -124,7 +124,7 @@ def track_status():
             content = file.read()
             if "Running" in content:
                 flag_BLAST = True
-            if ("FINISH" in content) and (not flag_BLAST)  :
+            if ("FINISH" in content) and (not flag_BLAST) and (flag_motif_scan)  :
                 flag_BLAST_finished = True
     
     return flag_search_fecth_done,flag_conservation_analysis,flag_motif_scan,flag_BLAST,flag_BLAST_finished,search_name
@@ -168,7 +168,16 @@ while True:
     # handle input 
     central_choices = input("Input your choices : ")
     if central_choices == "1":
-        subprocess.run(["python3","s1_gainseq.py"]) # "python3" here is as same as the shebang line in the script 
+        if flag_BLAST:
+            print()
+            print("IMPORTANT:BLAST is running , choose 4.BLAST and reset BLAST first".center(100))
+            print()
+        elif flag_BLAST_finished:
+            print()
+            print("IMPORTANT:BLAST DATA not collated , choose 4.BLAST and reset BLAST first ".center(100))
+            print()
+        else:
+            subprocess.run(["python3","s1_gainseq.py"]) # "python3" here is as same as the shebang line in the script 
     if central_choices == "2":
         if flag_search_fecth_done:
             subprocess.run(["python3","s2_conservation.py"]) 
