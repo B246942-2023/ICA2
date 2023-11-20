@@ -60,6 +60,14 @@ def make_blast_list():
         outfolder = "s4_out"
         filename = f'{outfolder}/seqBLAST_pre.txt'
 
+        #check precondition: it should have an autoscreen.txt
+        if not os.path.exists('s3_out/autoscreen.txt'):
+            print()
+            print("CAN'T FOUND autoscreen FILE!".center(100))
+            print("Do Motif Scan first!".center(100))
+            print()
+            exit()
+
         # write the first two line
         header = 'BLASTseqs'.center(100)
         separator = 'Quene line'.center(100,"@")
