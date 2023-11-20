@@ -53,9 +53,12 @@ def show_menu() :
             break
 
         else :
+            print("-".center(100,"-"))
+            print()
             print("IMPORTANT:Please do not enter plural nouns for proteins")
-            protein_family = input("Enter the protein family of interest: ")
-            taxonomic_group = input("Enter the taxonomic group: ")
+            print()
+            protein_family = input("   Enter the protein family of interest: ")
+            taxonomic_group = input("   Enter the taxonomic group: ")
             print("Your choices".center(100, '-'))
             print( f'''
                 protein family : {protein_family}
